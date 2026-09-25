@@ -9,6 +9,35 @@ Portfolio statis berbasis HTML/CSS/JS vanilla dengan arah visual neo-brutalism e
 - `script.js` — satu animasi masuk yang disengaja pada hero
 - `assets/` — tempat favicon/SVG/asset tambahan jika diperlukan
 
+## Pendekatan responsif (mobile-first)
+
+`styles.css` disusun **mobile-first**: gaya dasar menargetkan layar kecil, lalu ditingkatkan
+lewat media query `min-width`. Tidak ada lagi media query `max-width`.
+
+Urutan lapisan di dalam `styles.css`:
+
+1. **Mobile (base, ≈320px+)** — satu kolom penuh. Header 2 kolom (nama + email), catatan
+   lokasi disembunyikan, tanda `S/M` di hero disembunyikan, nomor section tampil di atas konten,
+   pilar dan kartu proyek ditumpuk, tombol/link bersuhu sentuh minimal 44px.
+2. **Tablet (`min-width: 768px`)** — nomor section pindah ke kolom sendiri (44px), heading
+   section jadi baris `flex` (judul di kiri, statistik di kanan), pilar jadi 2 kolom dengan
+   "Membangun" membentang penuh, timeline 2 kolom, keahlian + sertifikat berdampingan,
+   footer 3 kolom.
+3. **Desktop (`min-width: 1024px`)** — komposisi editorial lebar penuh: hero 3 kolom
+   (`8% / 1fr / 9%`) dengan tanda `S/M` kembali muncul, about 2 kolom, pilar 3 kolom dengan
+   tinggi bertingkat, proyek 2 kolom dengan WeWeb membentang 2 baris, timeline 3 kolom,
+   kontak 2 kolom.
+4. **Desktop besar (`min-width: 1440px`)** — ukuran teks dasar 18px dan tinggi blok ditambah.
+
+Catatan teknis:
+
+- Tipografi memakai `clamp()` dengan `vw` agar skala mengalir, tetapi ukuran judul di dalam
+  kolom sempit (pilar) memakai `vw` kecil supaya kata panjang tidak meluber keluar kotak.
+- Efek `hover` pada `.pressable` hanya aktif di perangkat berpointer presisi
+  (`@media (hover: hover)`), sehingga tidak "lengket" di layar sentuh.
+- `overflow-wrap: anywhere` dipakai pada email panjang agar tidak menyebabkan scroll horizontal.
+- `@media (prefers-reduced-motion: reduce)` tetap dihormati.
+
 ## Menjalankan lokal
 
 Tidak membutuhkan build step.

@@ -5,201 +5,369 @@
   --red: #FF4B3E;
   --mustard: #F4C400;
   --line: 3px;
+  --gutter: 5vw;          /* gutter mobile; dinaikkan bertahap di tablet & desktop */
   --display: "Bricolage Grotesque", sans-serif;
   --body: "IBM Plex Sans", sans-serif;
   --serif: "Source Serif 4", serif;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--body);
-  font-size: 17px;
+  font-size: 16px;              /* base = mobile */
   line-height: 1.55;
+  overflow-x: hidden;
 }
+
+img, svg, video { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
-a:focus-visible, button:focus-visible { outline: 4px solid var(--red); outline-offset: 4px; }
+
+a:focus-visible,
+button:focus-visible { outline: 4px solid var(--red); outline-offset: 4px; }
+
 .skip-link {
   position: fixed; left: 12px; top: 12px; z-index: 20;
   transform: translateY(-160%); background: var(--ink); color: var(--paper);
   padding: 10px 14px; font-weight: 700; border: 2px solid var(--paper);
 }
 .skip-link:focus { transform: translateY(0); }
+
+/* ==========================================================================
+   1. MOBILE — base styles (dari ≈320px ke atas)
+   ========================================================================== */
+
+/* --- Header: nama di kiri, email di kanan; catatan lokasi tampil mulai tablet --- */
 .site-header {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  min-height: 86px; border-bottom: var(--line) solid var(--ink);
-  align-items: center; padding: 14px 4vw;
-  font-size: .8rem; font-weight: 600;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .35rem 1rem;
+  padding: 14px var(--gutter);
+  border-bottom: var(--line) solid var(--ink);
+  font-size: .75rem;
+  font-weight: 600;
 }
-.header-name { font-family: var(--display); font-weight: 800; line-height: .82; font-size: 1.15rem; }
-.header-note { justify-self: center; }
-.header-mail { justify-self: end; }
+.header-name { font-family: var(--display); font-weight: 800; line-height: .82; font-size: 1.05rem; }
+.header-note { display: none; }
+.header-mail { justify-self: end; text-align: right; overflow-wrap: anywhere; }
+
+/* --- Hero: satu kolom penuh; tanda SM muncul mulai desktop --- */
 .hero {
-  min-height: calc(100vh - 86px); padding: 5vw 4vw 4vw;
-  display: grid; grid-template-columns: 8% 1fr 9%;
+  display: grid;
+  gap: 2.25rem;
+  padding: 2.5rem var(--gutter) 3rem;
   border-bottom: var(--line) solid var(--ink);
   overflow: hidden;
 }
-.hero-index, .section-number {
-  font-family: var(--display); font-weight: 800; font-size: .9rem;
-}
-.hero-copy { align-self: center; max-width: 1180px; }
-.hero-kicker { margin: 0 0 2rem; font-weight: 600; max-width: 680px; }
+.hero-index, .section-number { font-family: var(--display); font-weight: 800; font-size: .85rem; }
+.hero-copy { align-self: center; min-width: 0; }
+.hero-kicker { margin: 0 0 1.25rem; font-weight: 600; font-size: .95rem; }
+
 h1, h2, h3 { font-family: var(--display); line-height: .94; margin: 0; letter-spacing: -.045em; }
-h1 { font-size: clamp(4.2rem, 10vw, 10.5rem); max-width: 1200px; }
+h1 { font-size: clamp(2.8rem, 14vw, 5rem); max-width: 22ch; }
 h1 span { color: var(--blue); }
+
 .hero-bottom {
-  margin-top: 4rem; display: grid; grid-template-columns: minmax(280px, .8fr) 1fr;
-  gap: 6vw; border-top: var(--line) solid var(--ink); padding-top: 1.2rem;
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2.25rem;
+  padding-top: 1.2rem;
+  border-top: var(--line) solid var(--ink);
 }
-.hero-intro { font-size: clamp(1.15rem, 2vw, 1.65rem); max-width: 580px; margin: 0; }
-.hero-meta { display: grid; gap: .35rem; align-content: start; }
-.hero-meta a { font-weight: 700; }
-.hero-mark {
-  align-self: end; justify-self: end; font-family: var(--display); font-weight: 800;
-  font-size: clamp(3rem, 7vw, 7rem); line-height: .72; color: var(--red);
-  transform: rotate(-8deg);
-}
+.hero-intro { margin: 0; font-size: 1.1rem; max-width: 40ch; }
+.hero-meta { display: grid; gap: .4rem; align-content: start; font-size: .9rem; }
+.hero-meta a { font-weight: 700; overflow-wrap: anywhere; }
+.hero-mark { display: none; }
+
+/* --- Kerangka section: nomor di atas konten, satu kolom --- */
 .section-grid {
-  display: grid; grid-template-columns: 8% 1fr;
-  padding: 4.5vw 4vw; border-bottom: var(--line) solid var(--ink);
+  display: grid;
+  gap: .9rem;
+  padding: 3.25rem var(--gutter);
+  border-bottom: var(--line) solid var(--ink);
 }
 .section-main { min-width: 0; }
-.section-heading {
-  display: flex; justify-content: space-between; align-items: end;
-  gap: 2rem; margin-bottom: 3.5rem;
-}
-.section-heading h2 { font-size: clamp(3rem, 6vw, 6.5rem); }
-.section-heading p { max-width: 430px; margin: 0; }
+.section-heading { display: grid; gap: 1rem; margin-bottom: 2.25rem; }
+.section-heading h2 { font-size: clamp(2.5rem, 12vw, 4rem); }
+.section-heading p { margin: 0; max-width: 46ch; }
+
+/* --- Tentang --- */
 .about-main {
-  border: var(--line) solid var(--ink); padding: clamp(1.2rem, 3vw, 3rem);
-  box-shadow: 12px 12px 0 var(--blue);
+  border: var(--line) solid var(--ink);
+  padding: 1.1rem;
+  box-shadow: 6px 6px 0 var(--blue);
 }
-.about-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 5vw; }
+.about-layout { display: grid; gap: 1.75rem; }
 .pullquote {
   border: var(--line) solid var(--ink); background: var(--mustard);
-  padding: 2rem; align-self: start; box-shadow: 7px 7px 0 var(--ink);
+  padding: 1.25rem; box-shadow: 5px 5px 0 var(--ink);
 }
-.pullquote p { font: italic 500 clamp(1.5rem, 3vw, 2.5rem)/1.05 var(--serif); margin: 0; }
-.about-text > p { font-size: 1.1rem; margin-top: 0; }
-.facts { border-top: var(--line) solid var(--ink); margin-top: 2rem; }
-.facts div { display: grid; grid-template-columns: 150px 1fr; padding: .85rem 0; border-bottom: 1px solid var(--ink); gap: 1rem; }
+.pullquote p { font: italic 500 clamp(1.35rem, 6.5vw, 2rem)/1.08 var(--serif); margin: 0; }
+.about-text > p { margin-top: 0; font-size: 1rem; }
+.facts { border-top: var(--line) solid var(--ink); margin-top: 1.75rem; }
+.facts div { display: grid; gap: .2rem; padding: .85rem 0; border-bottom: 1px solid var(--ink); }
 .facts b { font-family: var(--display); }
+
+/* --- Pilar: ditumpuk penuh lebar --- */
 .pillar-layout {
-  display: grid; grid-template-columns: 1.3fr .75fr 1fr; align-items: start; gap: 0;
-  border-top: var(--line) solid var(--ink); border-left: var(--line) solid var(--ink);
+  display: grid;
+  border-top: var(--line) solid var(--ink);
+  border-left: var(--line) solid var(--ink);
 }
-.pillar { min-height: 330px; padding: 1.5rem; border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); display: flex; flex-direction: column; }
-.pillar h3 { font-size: clamp(2.4rem, 5vw, 5rem); margin-top: auto; }
-.pillar p { margin: 1.5rem 0 0; max-width: 360px; }
+.pillar {
+  display: flex; flex-direction: column;
+  min-height: 230px; padding: 1.25rem;
+  border-right: var(--line) solid var(--ink);
+  border-bottom: var(--line) solid var(--ink);
+}
+.pillar h3 { font-size: clamp(2.1rem, 10vw, 3.2rem); margin-top: auto; }
+.pillar p { margin: 1.25rem 0 0; max-width: 44ch; }
 .pillar-no { font-family: var(--display); font-weight: 800; }
-.pillar-build { background: var(--blue); color: var(--paper); min-height: 430px; }
-.pillar-grow { background: var(--paper); min-height: 300px; }
-.pillar-speak { background: var(--red); min-height: 360px; }
+.pillar-build { background: var(--blue); color: var(--paper); }
+.pillar-grow { background: var(--paper); }
+.pillar-speak { background: var(--red); }
+
+/* --- Karya pilihan --- */
 .work { background: var(--ink); color: var(--paper); }
 .work .section-number { color: var(--mustard); }
-.work .section-heading { border-bottom: 1px solid var(--paper); padding-bottom: 1.2rem; }
+.work .section-heading { border-bottom: 1px solid var(--paper); padding-bottom: 1.1rem; }
 .work-heading h2 { color: var(--paper); }
-.growth-stat { text-align: right; min-width: 270px; }
-.growth-stat span { display: block; font-size: .8rem; }
-.growth-stat strong { display: block; font-family: var(--display); font-size: clamp(2rem, 5vw, 4.5rem); color: var(--red); line-height: .9; }
+.growth-stat span { display: block; font-size: .78rem; }
+.growth-stat strong { display: block; font-family: var(--display); font-size: clamp(1.9rem, 9vw, 3.2rem); color: var(--red); line-height: .95; }
 .growth-stat i { font-style: normal; color: var(--mustard); }
-.projects { display: grid; grid-template-columns: 1.3fr .85fr; gap: 1.2rem; align-items: start; }
-.project { border: var(--line) solid var(--paper); padding: 1.5rem; position: relative; }
-.project h3 { font-size: clamp(2.3rem, 5vw, 5rem); margin-bottom: 1rem; }
-.project p { max-width: 700px; }
-.project-id { font-family: var(--display); font-weight: 800; margin-bottom: 2rem; color: var(--mustard); }
-.project-weweb { grid-row: span 2; min-height: 470px; background: var(--blue); border-color: var(--blue); }
+.projects { display: grid; gap: 1rem; }
+.project { position: relative; padding: 1.25rem; border: var(--line) solid var(--paper); }
+.project h3 { font-size: clamp(2rem, 10vw, 3.6rem); margin-bottom: .9rem; }
+.project p { max-width: 60ch; }
+.project-id { font-family: var(--display); font-weight: 800; margin-bottom: 1.5rem; color: var(--mustard); }
+.project-weweb { background: var(--blue); border-color: var(--blue); }
 .project-alinea { background: var(--paper); color: var(--ink); }
 .project-gomad { background: var(--red); color: var(--ink); border-color: var(--red); }
-.project-status { display: inline-block; margin-top: 5rem; font-size: .8rem; border-top: 1px solid currentColor; padding-top: .5rem; }
+.project-status { display: inline-block; margin-top: 2rem; font-size: .78rem; border-top: 1px solid currentColor; padding-top: .5rem; }
 .url-label { font-weight: 700; }
 .project-link, .certificate a {
-  display: inline-block; margin-top: 1rem; border: 2px solid currentColor;
-  padding: .55rem .8rem; font-weight: 700; text-decoration: none;
+  display: inline-flex; align-items: center; min-height: 44px;   /* target sentuh nyaman */
+  margin-top: .9rem; border: 2px solid currentColor;
+  padding: .55rem .85rem; font-weight: 700; text-decoration: none;
 }
 .pressable { transition: transform 80ms ease, box-shadow 80ms ease; box-shadow: 4px 4px 0 currentColor; }
-.pressable:hover, .pressable:active { transform: translate(4px, 4px); box-shadow: 0 0 0 currentColor; }
+.pressable:active { transform: translate(4px, 4px); box-shadow: 0 0 0 currentColor; }
+
+/* --- Perjalanan --- */
 .timeline { border-top: var(--line) solid var(--ink); }
-.timeline-row {
-  display: grid; grid-template-columns: 1.1fr 1.3fr 1fr; gap: 1rem;
-  padding: 1.15rem 0; border-bottom: 2px solid var(--ink);
-}
-.timeline-row time { font-size: .9rem; }
-.timeline-row strong { font-family: var(--display); font-size: 1.15rem; }
+.timeline-row { display: grid; gap: .15rem; padding: 1rem 0; border-bottom: 2px solid var(--ink); }
+.timeline-row time { font-size: .85rem; }
+.timeline-row strong { font-family: var(--display); font-size: 1.1rem; }
 .timeline-note {
-  display: grid; grid-template-columns: 1fr 1fr; margin-top: 2rem; padding: 1.5rem;
+  display: grid; gap: .75rem; margin-top: 1.75rem; padding: 1.25rem;
   background: var(--red); border: var(--line) solid var(--ink);
-  box-shadow: 8px 8px 0 var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
 }
-.timeline-note strong { font-family: var(--display); font-size: clamp(2.2rem, 5vw, 5rem); line-height: .9; }
-.skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem 5vw; }
-.skills-layout .section-heading { grid-column: 1 / -1; margin-bottom: 0; }
+.timeline-note strong { font-family: var(--display); font-size: clamp(1.9rem, 9vw, 3.6rem); line-height: .9; }
+
+/* --- Keahlian & sertifikasi --- */
+.skills-layout { display: grid; gap: 2rem; }
 .skill-list { display: flex; flex-wrap: wrap; align-content: start; gap: .55rem; }
 .skill-list span { border: 2px solid var(--ink); padding: .5rem .7rem; font-weight: 600; background: var(--paper); }
 .certificate {
-  background: var(--blue); color: var(--paper); border: var(--line) solid var(--ink);
-  padding: 1.5rem; display: grid; gap: .6rem; align-content: start; box-shadow: 8px 8px 0 var(--ink);
+  display: grid; gap: .6rem; align-content: start; padding: 1.25rem;
+  background: var(--blue); color: var(--paper);
+  border: var(--line) solid var(--ink); box-shadow: 6px 6px 0 var(--ink);
 }
-.certificate strong { font-family: var(--display); font-size: 2rem; }
+.certificate strong { font-family: var(--display); font-size: 1.75rem; }
 .certificate a { justify-self: start; }
-.contact { background: var(--mustard); min-height: 60vh; }
-.contact-inner { display: grid; grid-template-columns: 1fr .7fr; gap: 4vw; align-content: center; }
-.contact h2 { font-size: clamp(4rem, 10vw, 10rem); }
-.contact p { font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 540px; }
+
+/* --- Kontak --- */
+.contact { background: var(--mustard); }
+.contact-inner { display: grid; gap: 1.25rem; align-content: center; }
+.contact h2 { font-size: clamp(2.9rem, 15vw, 5rem); }
+.contact p { margin: 0; font-size: 1.1rem; max-width: 46ch; }
 .contact-button {
-  grid-column: 1 / -1; justify-self: start; margin-top: 2rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 1rem; min-height: 48px; padding: .9rem 1.1rem;
   background: var(--ink); color: var(--paper); border: 3px solid var(--ink);
-  padding: 1rem 1.2rem; text-decoration: none; font-family: var(--display);
-  font-size: clamp(1.2rem, 2vw, 1.7rem); box-shadow: 8px 8px 0 var(--paper);
+  font-family: var(--display); font-size: 1.05rem; text-decoration: none;
+  overflow-wrap: anywhere; box-shadow: 6px 6px 0 var(--paper);
 }
+
 footer {
-  display: grid; grid-template-columns: 1fr 1fr 1fr; padding: 1rem 4vw;
-  font-size: .8rem; font-weight: 600; border-top: var(--line) solid var(--ink);
+  display: grid; gap: .4rem; padding: 1rem var(--gutter);
+  font-size: .78rem; font-weight: 600; border-top: var(--line) solid var(--ink);
 }
-footer span:nth-child(2) { justify-self: center; }
-footer a { justify-self: end; }
-@media (max-width: 850px) {
-  .site-header { grid-template-columns: 1fr 1fr; }
-  .header-note { display: none; }
-  .header-mail { justify-self: end; }
-  .hero { grid-template-columns: 40px 1fr; min-height: auto; padding-top: 3rem; }
-  .hero-mark { display: none; }
-  .hero-bottom { grid-template-columns: 1fr; gap: 2rem; }
-  .section-grid { grid-template-columns: 40px 1fr; }
-  .about-layout, .skills-layout, .contact-inner { grid-template-columns: 1fr; }
-  .pillar-layout { grid-template-columns: 1fr; }
-  .pillar, .pillar-build, .pillar-grow, .pillar-speak { min-height: 280px; }
-  .projects { grid-template-columns: 1fr; }
-  .project-weweb { grid-row: auto; min-height: 340px; }
-  .growth-stat { text-align: left; }
-  .work-heading { align-items: start; flex-direction: column; }
-  .timeline-row { grid-template-columns: 1fr 1fr; }
+footer a { overflow-wrap: anywhere; }
+/* ==========================================================================
+   2. TABLET — ≥ 768px
+   Nomor section pindah ke kolom sendiri; pilar jadi 2 kolom.
+   ========================================================================== */
+@media (min-width: 768px) {
+  body { font-size: 17px; }
+
+  .site-header {
+    grid-template-columns: auto 1fr auto;
+    padding: 14px 4vw;
+    font-size: .8rem;
+  }
+  .header-name { font-size: 1.15rem; }
+  .header-note { display: block; justify-self: center; text-align: center; }
+  .header-mail { font-size: .8rem; }
+
+  .hero {
+    grid-template-columns: 44px 1fr;
+    gap: 3rem 1.5rem;
+    padding: 4rem 4vw 3.5rem;
+  }
+  .hero-index { align-self: start; }
+  .hero-kicker { font-size: 1rem; max-width: 52ch; }
+  .hero-bottom { grid-template-columns: 1.1fr 1fr; gap: 2.5rem; margin-top: 3rem; }
+  .hero-intro { font-size: 1.25rem; }
+
+  .section-grid {
+    grid-template-columns: 44px 1fr;
+    gap: 0 1.5rem;
+    padding: 4rem 4vw;
+  }
+  .section-heading {
+    display: flex; flex-wrap: wrap;
+    justify-content: space-between; align-items: end;
+    gap: 1.5rem 2rem;
+    margin-bottom: 2.75rem;
+  }
+  .section-heading h2 { font-size: clamp(3rem, 7vw, 4.5rem); }
+  .section-heading p { max-width: 430px; }
+
+  .about-main { padding: 2rem; box-shadow: 10px 10px 0 var(--blue); }
+  /* teks tetap satu kolom di tablet supaya baris tidak terlalu sempit */
+  .about-layout { grid-template-columns: 1fr; gap: 2rem; }
+
+  .pillar-layout { grid-template-columns: 1fr 1fr; }
+  .pillar-build { grid-column: 1 / -1; min-height: 320px; }
+  .pillar-grow, .pillar-speak { min-height: 260px; }
+  .pillar h3 { font-size: clamp(2rem, 6vw, 2.6rem); }
+
+  .growth-stat { text-align: right; }
+
+  .timeline-row { grid-template-columns: 1.1fr 1.6fr; gap: .2rem 1.5rem; }
   .timeline-row span { grid-column: 2; }
-  .timeline-note { grid-template-columns: 1fr; gap: 1rem; }
-  .contact h2 { font-size: clamp(4rem, 16vw, 8rem); }
-  footer { grid-template-columns: 1fr; gap: .4rem; }
-  footer span:nth-child(2), footer a { justify-self: start; }
+  .timeline-note {
+    grid-template-columns: 1fr 1fr; align-items: center;
+    gap: 1.5rem; padding: 1.5rem;
+  }
+
+  .skills-layout { grid-template-columns: 1fr 1fr; gap: 2.5rem 3rem; }
+  .skills-layout .section-heading { grid-column: 1 / -1; margin-bottom: 0; }
+  .certificate { padding: 1.5rem; }
+
+  .contact { min-height: 50vh; }
+  .contact-inner { grid-template-columns: 1.1fr 1fr; column-gap: 2.5rem; }
+  .contact h2 { font-size: clamp(4rem, 11vw, 6.5rem); }
+  .contact p { font-size: 1.3rem; }
+  .contact-button {
+    grid-column: 1 / -1; justify-self: start;
+    margin-top: 1.75rem; font-size: 1.3rem; box-shadow: 8px 8px 0 var(--paper);
+  }
+
+  footer { grid-template-columns: 1fr 1fr 1fr; align-items: center; padding: 1rem 4vw; font-size: .8rem; }
+  footer span:nth-child(2) { justify-self: center; }
+  footer a { justify-self: end; }
 }
-@media (max-width: 480px) {
-  body { font-size: 16px; }
-  .site-header { padding: 12px 5vw; }
-  .header-mail { font-size: .75rem; overflow-wrap: anywhere; text-align: right; }
-  .hero, .section-grid { padding-left: 5vw; padding-right: 5vw; }
-  .hero { grid-template-columns: 28px 1fr; padding-top: 2.5rem; padding-bottom: 3rem; }
-  .section-grid { grid-template-columns: 28px 1fr; padding-top: 3.2rem; padding-bottom: 3.2rem; }
-  h1 { font-size: clamp(3.2rem, 17vw, 5rem); }
-  .section-heading h2 { font-size: clamp(2.8rem, 14vw, 4.5rem); }
-  .about-main { box-shadow: 7px 7px 0 var(--blue); }
-  .facts div { grid-template-columns: 1fr; gap: .25rem; }
-  .project, .pillar, .pullquote { padding: 1rem; }
-  .project-status { margin-top: 2rem; }
-  .timeline-row { grid-template-columns: 1fr; gap: .2rem; }
+
+/* ==========================================================================
+   3. DESKTOP — ≥ 1024px
+   Kembali ke komposisi editorial lebar penuh, termasuk tanda SM di hero.
+   ========================================================================== */
+@media (min-width: 1024px) {
+  .site-header { grid-template-columns: 1fr 1fr 1fr; min-height: 86px; padding: 14px 4vw; }
+
+  .hero {
+    grid-template-columns: 8% 1fr 9%;
+    gap: 0;
+    min-height: calc(100vh - 86px);
+    padding: 5vw 4vw 4vw;
+  }
+  .hero-copy { align-self: center; max-width: 1180px; }
+  .hero-kicker { margin-bottom: 2rem; max-width: 680px; }
+  h1 { font-size: clamp(4.2rem, 10vw, 10.5rem); }
+  .hero-bottom { grid-template-columns: minmax(280px, .8fr) 1fr; gap: 6vw; margin-top: 4rem; }
+  .hero-intro { font-size: clamp(1.15rem, 2vw, 1.65rem); max-width: 580px; }
+  .hero-mark {
+    display: block; align-self: end; justify-self: end;
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(3rem, 7vw, 7rem); line-height: .72;
+    color: var(--red); transform: rotate(-8deg);
+  }
+
+  .section-grid { grid-template-columns: 8% 1fr; gap: 0; padding: 4.5vw 4vw; }
+  .section-heading { margin-bottom: 3.5rem; }
+  .section-heading h2 { font-size: clamp(3rem, 6vw, 6.5rem); }
+
+  .about-main { padding: clamp(1.5rem, 3vw, 3rem); box-shadow: 12px 12px 0 var(--blue); }
+  .about-layout { grid-template-columns: .85fr 1.15fr; gap: 5vw; }
+  .pullquote { padding: 2rem; box-shadow: 7px 7px 0 var(--ink); }
+  .pullquote p { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+  .about-text > p { font-size: 1.1rem; }
+  .facts { margin-top: 2rem; }
+  .facts div { grid-template-columns: 150px 1fr; gap: 1rem; }
+
+  .pillar-layout { grid-template-columns: 1.3fr .75fr 1fr; align-items: start; }
+  .pillar { padding: 1.5rem; }
+  .pillar-build { grid-column: auto; min-height: 430px; }
+  .pillar-grow { min-height: 300px; }
+  .pillar-speak { min-height: 360px; }
+  /* ukuran mengikuti lebar kolom, bukan viewport, agar kata panjang tidak meluber */
+  .pillar h3 { font-size: clamp(2.1rem, 3.4vw, 4.5rem); }
+  .pillar p { margin-top: 1.5rem; max-width: 360px; }
+
+  .work .section-heading { padding-bottom: 1.2rem; }
+  .growth-stat { min-width: 270px; }
+  .growth-stat strong { font-size: clamp(2rem, 5vw, 4.5rem); }
+  .projects { grid-template-columns: 1.3fr .85fr; gap: 1.2rem; align-items: start; }
+  .project { padding: 1.5rem; }
+  .project h3 { font-size: clamp(2.3rem, 5vw, 5rem); margin-bottom: 1rem; }
+  .project p { max-width: 700px; }
+  .project-id { margin-bottom: 2rem; }
+  .project-weweb { grid-row: span 2; min-height: 470px; }
+  .project-status { margin-top: 5rem; }
+
+  .timeline-row { grid-template-columns: 1.1fr 1.3fr 1fr; gap: 1rem; padding: 1.15rem 0; }
+  .timeline-row time { font-size: .9rem; }
+  .timeline-row strong { font-size: 1.15rem; }
   .timeline-row span { grid-column: auto; }
-  .contact-button { width: 100%; overflow-wrap: anywhere; }
+  .timeline-note { margin-top: 2rem; padding: 1.5rem; box-shadow: 8px 8px 0 var(--ink); }
+  .timeline-note strong { font-size: clamp(2.2rem, 5vw, 5rem); }
+
+  .certificate strong { font-size: 2rem; }
+
+  .contact { min-height: 60vh; }
+  .contact-inner { grid-template-columns: 1fr .7fr; gap: 4vw; }
+  .contact h2 { font-size: clamp(4rem, 10vw, 10rem); }
+  .contact p { font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 540px; }
+  .contact-button { padding: 1rem 1.2rem; font-size: clamp(1.2rem, 2vw, 1.7rem); }
 }
+
+/* ==========================================================================
+   4. DESKTOP BESAR — ≥ 1440px
+   ========================================================================== */
+@media (min-width: 1440px) {
+  body { font-size: 18px; }
+  .about-main { padding: 3rem; }
+  .pillar-build { min-height: 470px; }
+  .project-weweb { min-height: 540px; }
+  .contact p { max-width: 600px; }
+}
+
+/* Hover hanya untuk perangkat berpointer presisi (bukan layar sentuh) */
+@media (hover: hover) and (pointer: fine) {
+  .pressable:hover { transform: translate(4px, 4px); box-shadow: 0 0 0 currentColor; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .pressable { transition: none; }
